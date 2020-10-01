@@ -1,21 +1,13 @@
-﻿using LiteDB;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
+using LiteDB;
+using Newtonsoft.Json;
 
 namespace NClicker.Storage
 {
-    public class LiteDatabaseMapper<TKey, TValue> : IStorage<TKey, TValue>
+    public sealed class LiteDatabaseMapper<TKey, TValue> : ILiteStorage<TKey, TValue>
     {
-        /// <summary>
-        /// In .NET Core the hashcodes of objects are not immutable/consistent,
-        /// we must have strategy for handling of the keys for the .NET Core.
-        /// </summary>
-       
-
-        private const string StorageName = @"IStorage.db";
+        private const string StorageName = @"Storage.db";
 
         private readonly LiteCollection<BsonDocument> _collection;
         private readonly LiteDatabase _database;
@@ -44,6 +36,15 @@ namespace NClicker.Storage
             var result = _collection.FindOne((x) => x["Identifier"].AsString.Equals(
                 Constants.IsNetCore ? JsonConvert.SerializeObject(key) : key.GetHashCode().ToString()));
             return result != null ? mapper.ToObject<StorageItem<TKey, TValue>>(result).Value : default;
+        }
+
+        public bool ContainsKey(TKey key)
+        {
+            _collection.FindOne((x) => x["Identifier"].AsString.Equals(
+                Constants.IsNetCore ? JsonConvert.SerializeObject(key) : key.GetHashCode().ToString()));
+            var result = _collection.FindOne((x) => x["Identifier"].AsString.Equals(
+                Constants.IsNetCore ? JsonConvert.SerializeObject(key) : key.GetHashCode().ToString()));
+            return result != null;
         }
 
         public void Store(TKey key, TValue value)

@@ -13,9 +13,9 @@ namespace NClicker.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly PresetStorage _presetStorage;
-        private readonly PresetService _presetService;
-        private readonly KeyboardControllerService _keyboardController;
+        private readonly IPresetStorage _presetStorage;
+        private readonly IPresetService _presetService;
+        private readonly IKeyboardService _keyboardService;
 
         #region Backing fields
 
@@ -32,13 +32,13 @@ namespace NClicker.ViewModels
 
         #endregion Backing fields
 
-        public MainViewModel(PresetStorage presetStorage, PresetService presetService,
-            KeyboardControllerService keyboardController)
+        public MainViewModel(IPresetStorage presetStorage, IPresetService presetService,
+            IKeyboardService keyboardService)
         {
             _presets = new ObservableCollection<RunConfiguration>();
             _presetStorage = presetStorage;
             _presetService = presetService;
-            _keyboardController = keyboardController;
+            _keyboardService = keyboardService;
             SetDefaultConfiguration();
             _presetService.SharedPresetCollection.CollectionChanged += CollectionChanged;
         }
@@ -69,7 +69,7 @@ namespace NClicker.ViewModels
                     return;
                 }
 
-                App.Context.Resolve<MouseControllerService>()
+                App.Context.Resolve<IMouseControllerService>()
                     .LoopClick(_seconds, _milliseconds, _randomSeconds, _randomMilliseconds);
             }
             catch (Exception exception)
@@ -79,10 +79,8 @@ namespace NClicker.ViewModels
             }
         }, () => true);
 
-        public ICommand StopClickCommand => new Command(() =>
-        {
-            App.Context.Resolve<MouseControllerService>().Stop();
-        }, () => true);
+        public ICommand StopClickCommand =>
+            new Command(() => { App.Context.Resolve<IMouseControllerService>().Stop(); }, () => true);
 
         public ICommand CreatePresetCommand => new Command(() =>
         {
@@ -105,6 +103,7 @@ namespace NClicker.ViewModels
             {
                 return;
             }
+
             _presetService.RemovePreset(SelectedConfiguration);
             SelectedConfiguration = null;
         }, () => true);
@@ -118,6 +117,7 @@ namespace NClicker.ViewModels
             {
                 return;
             }
+
             _presetService.ResetPreset(SelectedConfiguration);
             _lastSelectedConfiguration = SelectedConfiguration;
             SelectedConfiguration = null;
@@ -181,7 +181,7 @@ namespace NClicker.ViewModels
             set
             {
                 SetPropertyValue(ref _blockKeys, value);
-                App.Context.Resolve<KeyboardControllerService>().BlockInput(value);
+                _keyboardService.BlockInput(value);
             }
         }
 

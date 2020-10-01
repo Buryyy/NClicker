@@ -1,20 +1,19 @@
-﻿using Autofac;
-using NClicker.Models;
+﻿using NClicker.Models;
 using NClicker.Storage;
 using NClicker.Utils;
 using System.Collections.ObjectModel;
 
 namespace NClicker.Services
 {
-    public class PresetService : IService
+    public class PresetService : IPresetService
     {
         public ObservableCollection<RunConfiguration> SharedPresetCollection { get; set; }
 
-        private readonly PresetStorage _storage;
+        private readonly IPresetStorage _storage;
 
-        public PresetService()
+        public PresetService(IPresetStorage presetStorage)
         {
-            _storage = App.Context.Resolve<PresetStorage>();
+            _storage = presetStorage;
             SharedPresetCollection = new ObservableCollection<RunConfiguration>(_storage.Presets);
         }
 
@@ -54,6 +53,5 @@ namespace NClicker.Services
             SharedPresetCollection.ForEach(item => Debug.WriteLine(item.Name));
 #endif
         }
-        
     }
 }

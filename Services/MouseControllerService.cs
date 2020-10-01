@@ -6,16 +6,17 @@ using System.Windows;
 
 namespace NClicker.Services
 {
-    public class MouseControllerService : IService
+    public class MouseControllerService : IMouseControllerService
     {
-        public MouseControllerService()
+        private readonly Random _random;
+
+        public bool IsRunning { get; set; }
+
+        public MouseControllerService(Random random)
         {
             _random = new Random();
         }
 
-        private readonly Random _random;
-
-        public bool IsRunning { get; set; }
         private static Point CursorPosition => GetCursorPos(out var position) ? position : new Point(-1, -1);
 
         [DllImport("user32.dll")]
@@ -41,6 +42,7 @@ namespace NClicker.Services
                     {
                         return;
                     }
+
                     mouse_event((int)MouseClickType.LeftDown, x, y, 0, 0);
                     mouse_event((int)MouseClickType.LeftUp, x, y, 0, 0);
 
@@ -55,7 +57,5 @@ namespace NClicker.Services
         {
             IsRunning = false;
         }
-
-       
     }
 }

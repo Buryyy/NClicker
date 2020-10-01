@@ -1,5 +1,4 @@
-﻿using Autofac;
-using NClicker.Models;
+﻿using NClicker.Models;
 using NClicker.Services;
 using NClicker.Storage;
 using System.Windows.Input;
@@ -8,15 +7,18 @@ namespace NClicker.ViewModels
 {
     public class CreatePresetViewModel : BaseViewModel
     {
+        private readonly IPresetService _presetService;
         private readonly RunConfiguration _configuration;
-        private readonly PresetStorage _presetStorage;
+        private readonly IPresetStorage _presetStorage;
 
         private string _presetName;
 
-        public CreatePresetViewModel(RunConfiguration configuration)
+        public CreatePresetViewModel(RunConfiguration configuration, IPresetStorage presetStorage,
+            IPresetService presetService)
         {
             _configuration = configuration;
-            _presetStorage = App.Context.Resolve<PresetStorage>();
+            _presetStorage = presetStorage;
+            _presetService = presetService;
             PresetName = "Default";
         }
 
@@ -30,7 +32,8 @@ namespace NClicker.ViewModels
                 int presetNumber = GetNextAvailableNumber();
                 _configuration.Name = PresetName + presetNumber; //Now the output is like 'Default1', 'Default2' etc.
             }
-            App.Context.Resolve<PresetService>().AddPreset(_configuration);
+
+            _presetService.AddPreset(_configuration);
 #if Debug
                 Debug.WriteLine("Created preset " + _configuration.Name);
 #endif
@@ -59,6 +62,7 @@ namespace NClicker.ViewModels
                     return value;
                 }
             }
+
             return value;
         }
     }

@@ -18,6 +18,7 @@ namespace NClicker.ViewModels
             {
                 return false;
             }
+
             field = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             return true;

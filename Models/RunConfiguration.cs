@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace NClicker.Models
 {
-    public class RunConfiguration : INotifyPropertyChanged
+    public sealed class RunConfiguration : INotifyPropertyChanged
     {
         public string Name { get; set; }
 
@@ -24,7 +24,7 @@ namespace NClicker.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

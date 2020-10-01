@@ -1,6 +1,8 @@
-﻿using NClicker.Models;
+﻿using Autofac;
+using NClicker.Models;
+using NClicker.Services;
+using NClicker.Storage;
 using NClicker.ViewModels;
-using System.Windows;
 
 namespace NClicker.Views
 {
@@ -12,7 +14,9 @@ namespace NClicker.Views
         public CreatePresetView(RunConfiguration configuration)
         {
             InitializeComponent();
-            DataContext = new CreatePresetViewModel(configuration);
+            var presetStorage = App.Context.Resolve<IPresetStorage>();
+            var presetService = App.Context.Resolve<IPresetService>();
+            DataContext = new CreatePresetViewModel(configuration, presetStorage, presetService);
         }
     }
 }

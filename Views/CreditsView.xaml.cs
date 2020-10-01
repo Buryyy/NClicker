@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace NClicker.Views
+﻿namespace NClicker.Views
 {
     /// <summary>
     /// Interaction logic for CreditsView.xaml

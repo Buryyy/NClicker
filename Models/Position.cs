@@ -4,10 +4,10 @@ using System.Windows;
 namespace NClicker.Models
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct Position
+    public readonly struct Position
     {
-        public int X;
-        public int Y;
+        public int X { get; }
+        public int Y { get; }
 
         public Position(int x, int y)
         {

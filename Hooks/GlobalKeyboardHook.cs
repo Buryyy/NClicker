@@ -13,20 +13,23 @@ namespace NClicker.Hooks
         {
             _windowsHookHandle = IntPtr.Zero;
             _user32LibraryHandle = IntPtr.Zero;
-            _hookProc = LowLevelKeyboardProc; // we must keep alive _hookProc, because GC is not aware about SetWindowsHookEx behaviour.
+            _hookProc =
+                LowLevelKeyboardProc; // we must keep alive _hookProc, because GC is not aware about SetWindowsHookEx behaviour.
 
             _user32LibraryHandle = LoadLibrary("User32");
             if (_user32LibraryHandle == IntPtr.Zero)
             {
                 int errorCode = Marshal.GetLastWin32Error();
-                throw new Win32Exception(errorCode, $"Failed to load library 'User32.dll'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
+                throw new Win32Exception(errorCode,
+                    $"Failed to load library 'User32.dll'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
             }
 
             _windowsHookHandle = SetWindowsHookEx(WH_KEYBOARD_LL, _hookProc, _user32LibraryHandle, 0);
             if (_windowsHookHandle == IntPtr.Zero)
             {
                 int errorCode = Marshal.GetLastWin32Error();
-                throw new Win32Exception(errorCode, $"Failed to adjust keyboard hooks for '{Process.GetCurrentProcess().ProcessName}'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
+                throw new Win32Exception(errorCode,
+                    $"Failed to adjust keyboard hooks for '{Process.GetCurrentProcess().ProcessName}'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
             }
         }
 
@@ -40,8 +43,10 @@ namespace NClicker.Hooks
                     if (!UnhookWindowsHookEx(_windowsHookHandle))
                     {
                         int errorCode = Marshal.GetLastWin32Error();
-                        throw new Win32Exception(errorCode, $"Failed to remove keyboard hooks for '{Process.GetCurrentProcess().ProcessName}'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
+                        throw new Win32Exception(errorCode,
+                            $"Failed to remove keyboard hooks for '{Process.GetCurrentProcess().ProcessName}'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
                     }
+
                     _windowsHookHandle = IntPtr.Zero;
 
                     // ReSharper disable once DelegateSubtraction
@@ -54,8 +59,10 @@ namespace NClicker.Hooks
                 if (!FreeLibrary(_user32LibraryHandle)) // reduces reference to library by 1.
                 {
                     int errorCode = Marshal.GetLastWin32Error();
-                    throw new Win32Exception(errorCode, $"Failed to unload library 'User32.dll'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
+                    throw new Win32Exception(errorCode,
+                        $"Failed to unload library 'User32.dll'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
                 }
+
                 _user32LibraryHandle = IntPtr.Zero;
             }
         }
@@ -183,6 +190,7 @@ namespace NClicker.Hooks
                 handler?.Invoke(this, eventArguments);
                 fEatKeyStroke = eventArguments.Handled;
             }
+
             return fEatKeyStroke ? (IntPtr)1 : CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
         }
     }

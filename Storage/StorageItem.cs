@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Runtime.InteropServices;
 
 namespace NClicker.Storage
 {
@@ -20,5 +18,6 @@ namespace NClicker.Storage
         public StorageItem()
         {
         }
+
     }
 }

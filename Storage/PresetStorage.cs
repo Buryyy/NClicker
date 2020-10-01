@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace NClicker.Storage
 {
-    public class PresetStorage : IStorage
+    public class PresetStorage : IPresetStorage
     {
         public int TotalPresets => _storage.Count;
 
@@ -13,6 +13,17 @@ namespace NClicker.Storage
         public PresetStorage()
         {
             _storage = new LiteDatabaseMapper<string, RunConfiguration>("SharedPresetCollection");
+        }
+
+        public IEnumerable<RunConfiguration> Presets
+        {
+            get
+            {
+                return _storage.Count != 0
+                    ? _storage.Values
+                        .OrderByDescending(preset => preset.CreationDate).ToList()
+                    : new List<RunConfiguration>();
+            }
         }
 
         public void Add(RunConfiguration configuration)
@@ -29,15 +40,6 @@ namespace NClicker.Storage
         public void Remove(string name)
         {
             _storage.Remove(name);
-        }
-
-        public IList<RunConfiguration> Presets
-        {
-            get
-            {
-                return _storage.Count != 0 ? _storage.Values
-                        .OrderByDescending(preset => preset.CreationDate).ToList() : new List<RunConfiguration>();
-            }
         }
 
         public bool Contains(string key)

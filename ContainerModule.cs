@@ -10,24 +10,23 @@ namespace NClicker
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<IStorage>()
-                .InstancePerLifetimeScope()
-                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
             //Storages
-            builder.Register(c => new PresetStorage()).SingleInstance();
+            builder.Register(c => new PresetStorage()).As<IPresetStorage>().SingleInstance();
 
             //Services
-            builder.Register(c => new PresetService()).SingleInstance();
+            builder.Register(c => new PresetService(c.Resolve<IPresetStorage>()))
+                .As<IPresetService>().SingleInstance();
+            builder.Register(c => new MouseControllerService(new System.Random()))
+                .As<IMouseControllerService>().SingleInstance();
 
-            builder.Register(c => new MouseControllerService()).SingleInstance();
             builder.Register(c => new GlobalKeyboardHook()).SingleInstance();
 
-            builder.Register(c => new KeyboardControllerService(
-                c.Resolve<GlobalKeyboardHook>())).SingleInstance();
+            builder.Register(c => new KeyboardService(
+                c.Resolve<GlobalKeyboardHook>())).As<IKeyboardService>().SingleInstance();
 
             builder.Register(c => new MainViewModel(
-                c.Resolve<PresetStorage>(), c.Resolve<PresetService>(),
-                c.Resolve<KeyboardControllerService>())).SingleInstance();
+                c.Resolve<IPresetStorage>(), c.Resolve<IPresetService>(),
+                c.Resolve<IKeyboardService>())).SingleInstance();
         }
     }
 }

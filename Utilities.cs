@@ -27,6 +27,7 @@ namespace NClicker.Utils
             {
                 end = source.Length + end;
             }
+
             int len = end - start;
 
             // Return new array.
@@ -35,6 +36,7 @@ namespace NClicker.Utils
             {
                 res[i] = source[i + start];
             }
+
             return res;
         }
     }
