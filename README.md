@@ -3,7 +3,7 @@
 
 NClicker is an auto click tool for Windows. You can easily setup a interval for mouse clicks, randomization of the clicks is also supported and presets of settings.
 
-# Basic design overview
+# Overview
 - Design pattern used is the MVVM design pattern.
 - AutoFac IOC. 
 - Microsoft's app center for logging, info, error tracking and statistics. ( www.appcenter.ms )
