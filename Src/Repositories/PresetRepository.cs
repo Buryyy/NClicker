@@ -12,6 +12,7 @@ namespace NClicker.Repositories
 
         public PresetRepository()
         {
+
             _repository = new LiteDatabase(Constants.LiteDbConnectionString, BsonMapper.Global);
         }
 

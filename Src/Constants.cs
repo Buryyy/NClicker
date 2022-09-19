@@ -20,6 +20,6 @@ namespace NClicker
             BlockInput = true,
         };
 
-        public const string LiteDbConnectionString = "LocalDB.db";
+        public static readonly string LiteDbConnectionString = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\NClicker\LocalDB.db";
     }
 }

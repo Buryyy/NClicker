@@ -18,15 +18,15 @@ namespace NClicker.Services
 
         public void AddPreset(RunConfiguration configuration)
         {
-            SharedPresetCollection.Add(configuration);
             _presetRepository.Upsert(configuration);
+            SharedPresetCollection.Add(configuration);
+
         }
 
         public void RemovePreset(RunConfiguration configuration)
         {
-            SharedPresetCollection.Remove(configuration);
             _presetRepository.Remove(configuration.Name);
-
+            SharedPresetCollection.Remove(configuration);
         }
 
         public void ResetPreset(RunConfiguration configuration)
