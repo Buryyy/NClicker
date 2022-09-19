@@ -14,7 +14,7 @@ namespace NClicker.Views
         public CreatePresetView(RunConfiguration configuration)
         {
             InitializeComponent();
-            var presetStorage = App.Context.Resolve<IPresetStorage>();
+            var presetStorage = App.Context.Resolve<IPresetRepository>();
             var presetService = App.Context.Resolve<IPresetService>();
             DataContext = new CreatePresetViewModel(configuration, presetStorage, presetService);
         }

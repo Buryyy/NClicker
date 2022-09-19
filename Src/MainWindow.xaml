@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:NClicker"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="NClicker"
+    Title="{Binding AppTitle}"
     Width="657.5"
     Height="306.5"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -18,6 +18,10 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid Margin="0,1,-0.333,-1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="145*" />
+            <ColumnDefinition Width="513*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30*" />
             <RowDefinition />
@@ -25,7 +29,7 @@
         <TextBox
             Width="43"
             Height="23"
-            Margin="22,90,0,0"
+            Margin="15,73,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             IsReadOnly="False"
@@ -42,9 +46,10 @@
             Content="Seconds"
             RenderTransformOrigin="8.151,1.715" />
         <TextBox
+            Grid.ColumnSpan="2"
             Width="43"
             Height="23"
-            Margin="142,90,0,0"
+            Margin="140,73,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             CommandManager.PreviewExecuted="textBox_PreviewExecuted"
@@ -56,8 +61,9 @@
             Text="{Binding Path=RandomMilliseconds, UpdateSourceTrigger=PropertyChanged}"
             TextWrapping="Wrap" />
         <Label
+            Grid.Column="1"
             Width="91"
-            Margin="185,185,0,0"
+            Margin="40,185,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="Milliseconds"
@@ -77,12 +83,13 @@
             TextWrapping="Wrap" />
         <Label
             Width="65"
-            Margin="65,90,0,0"
+            Margin="70,78,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="Seconds"
             RenderTransformOrigin="8.151,1.715" />
         <TextBox
+            Grid.ColumnSpan="2"
             Width="43"
             Height="23"
             Margin="137,187,0,0"
@@ -97,8 +104,9 @@
             Text="{Binding Path=Milliseconds, UpdateSourceTrigger=PropertyChanged}"
             TextWrapping="Wrap" />
         <Label
+            Grid.Column="1"
             Width="91"
-            Margin="194,95,0,0"
+            Margin="42,78,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="Milliseconds"
@@ -111,6 +119,7 @@
             Command="{Binding StartClickCommand}"
             Content="Start (F1)" />
         <Button
+            Grid.ColumnSpan="2"
             Width="100"
             Margin="140,228,0,0"
             HorizontalAlignment="Left"
@@ -118,51 +127,62 @@
             Command="{Binding StopClickCommand}"
             Content="Stop (F2)" />
         <Button
+            Grid.Column="1"
             Width="125"
-            Margin="255,228,0,0"
+            Margin="110,228,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Command="{Binding CreatePresetCommand}"
             Content="Save as preset" />
         <Label
-            Margin="33,145,0,0"
+            Margin="10,159,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="Delay settings" />
         <Label
-            Margin="33,45,0,0"
+            Margin="10,32,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="Settings " />
         <Label
-            Margin="20,70,0,0"
+            Grid.ColumnSpan="2"
+            Margin="13,53,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="Randomize seconds &amp; milliseconds"
             FontSize="10" />
         <Menu
+            Grid.ColumnSpan="2"
             Width="655"
-            Height="35"
-            Margin="0,0,-2.667,0"
-            HorizontalAlignment="Center"
+            Height="30"
+            Margin="3,0,0,0"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             IsMainMenu="True">
-            <MenuItem Command="{Binding DisplayLicenseCommand}" Header="_License" />
-            <MenuItem Command="{Binding DisplayDonateCommand}" Header="_Donate" />
+            <MenuItem
+                Height="28"
+                Command="{Binding DisplayLicenseCommand}"
+                Header="_License" />
+            <MenuItem
+                Height="30"
+                Command="{Binding DisplayDonateCommand}"
+                Header="_Donate" />
         </Menu>
         <CheckBox
             Grid.Row="0"
-            Margin="15,120,0,0"
+            Grid.ColumnSpan="2"
+            Margin="13,135,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="Block key on press (F1/F2)"
+            Foreground="White"
             IsChecked="{Binding BlockKeys}" />
         <ListView
             Grid.Row="0"
+            Grid.Column="1"
             Height="175"
-            Margin="385,80,12.333,15"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Center"
+            Margin="240,86,12,0"
+            VerticalAlignment="Top"
             Background="LightGray"
             BorderThickness="1"
             Foreground="Silver"
@@ -185,20 +205,16 @@
         </ListView>
         <Label
             Grid.Row="0"
-            Margin="405,50,0,0"
+            Grid.Column="1"
+            Margin="260,50,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Content="{Binding PresetsHeader}" />
+
+
         <Image
-            Margin="17,50,607.333,195"
-            Source="Resources/icons8_settings_96px.png"
-            Stretch="Fill" />
-        <Image
-            Margin="17,148,607.333,97"
-            Source="Resources/icons8_sync_settings_96px.png"
-            Stretch="Fill" />
-        <Image
-            Margin="387,55,237.333,190"
+            Grid.Column="1"
+            Margin="242,55,238,190"
             Source="Resources/icons8_list_96px.png"
             Stretch="Fill" />
     </Grid>

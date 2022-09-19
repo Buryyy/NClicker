@@ -1,8 +1,8 @@
-﻿using NClicker.Models;
+﻿using NClicker.Helpers;
+using NClicker.Models;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace NClicker.Services
 {
@@ -17,10 +17,7 @@ namespace NClicker.Services
             _random = new Random();
         }
 
-        private static Point CursorPosition => GetCursorPos(out var position) ? position : new Point(-1, -1);
 
-        [DllImport("user32.dll")]
-        private static extern void mouse_event(int dwsFlags, int dx, int dy, int cButtons, int dwExtraInfo);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -35,16 +32,15 @@ namespace NClicker.Services
 
                 while (IsRunning)
                 {
-                    int x = Convert.ToInt32(CursorPosition.X);
-                    int y = Convert.ToInt32(CursorPosition.Y);
-
-                    if (x == -1 || y == -1)
+                    if (!Win32UserApi.GetMousePosition(out var coords))
                     {
                         return;
                     }
+                    int x = Convert.ToInt32(coords.X);
+                    int y = Convert.ToInt32(coords.Y);
 
-                    mouse_event((int)MouseClickType.LeftDown, x, y, 0, 0);
-                    mouse_event((int)MouseClickType.LeftUp, x, y, 0, 0);
+                    Win32UserApi.OnMouseClick((int)NativeMouseClickFlags.LeftDown, x, y, 0, 0);
+                    Win32UserApi.OnMouseClick((int)NativeMouseClickFlags.LeftUp, x, y, 0, 0);
 
                     await Task.Delay(new TimeSpan(
                         0, 0, 0, seconds + _random.Next(0 + randomSeconds),

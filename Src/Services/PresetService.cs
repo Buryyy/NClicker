@@ -1,6 +1,5 @@
 ﻿using NClicker.Models;
 using NClicker.Storage;
-using NClicker.Utils;
 using System.Collections.ObjectModel;
 
 namespace NClicker.Services
@@ -9,26 +8,25 @@ namespace NClicker.Services
     {
         public ObservableCollection<RunConfiguration> SharedPresetCollection { get; set; }
 
-        private readonly IPresetStorage _storage;
+        private readonly IPresetRepository _presetRepository;
 
-        public PresetService(IPresetStorage presetStorage)
+        public PresetService(IPresetRepository presetPresetRepository)
         {
-            _storage = presetStorage;
-            SharedPresetCollection = new ObservableCollection<RunConfiguration>(_storage.Presets);
+            _presetRepository = presetPresetRepository;
+            SharedPresetCollection = new ObservableCollection<RunConfiguration>(_presetRepository.GetAllPresetsOrdered());
         }
 
         public void AddPreset(RunConfiguration configuration)
         {
             SharedPresetCollection.Add(configuration);
-            _storage.Add(configuration);
-            RefreshSharedPresets();
+            _presetRepository.Upsert(configuration);
         }
 
         public void RemovePreset(RunConfiguration configuration)
         {
             SharedPresetCollection.Remove(configuration);
-            _storage.Remove(configuration.Name);
-            RefreshSharedPresets();
+            _presetRepository.Remove(configuration.Name);
+
         }
 
         public void ResetPreset(RunConfiguration configuration)
@@ -40,18 +38,10 @@ namespace NClicker.Services
             configuration.RandomSeconds = defaultPreset.RandomSeconds;
             configuration.RandomMilliseconds = defaultPreset.RandomMilliseconds;
             configuration.BlockInput = defaultPreset.BlockInput;
-            _storage.Update(configuration);
+            _presetRepository.Upsert(configuration);
         }
 
-        private void RefreshSharedPresets()
-        {
-            SharedPresetCollection.Clear();
+        public int GetTotalPresets() => _presetRepository.GetPresetsCount();
 
-            var savedPresets = _storage.Presets;
-            savedPresets.ForEach(preset => SharedPresetCollection.Add(preset));
-#if Debug
-            SharedPresetCollection.ForEach(item => Debug.WriteLine(item.Name));
-#endif
-        }
     }
 }

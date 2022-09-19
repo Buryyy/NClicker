@@ -9,15 +9,15 @@ namespace NClicker.ViewModels
     {
         private readonly IPresetService _presetService;
         private readonly RunConfiguration _configuration;
-        private readonly IPresetStorage _presetStorage;
+        private readonly IPresetRepository _presetRepository;
 
         private string _presetName;
 
-        public CreatePresetViewModel(RunConfiguration configuration, IPresetStorage presetStorage,
+        public CreatePresetViewModel(RunConfiguration configuration, IPresetRepository presetRepository,
             IPresetService presetService)
         {
             _configuration = configuration;
-            _presetStorage = presetStorage;
+            _presetRepository = presetRepository;
             _presetService = presetService;
             PresetName = "Default";
         }
@@ -27,16 +27,13 @@ namespace NClicker.ViewModels
         public ICommand AddPresetCommand => new Command(() =>
         {
             _configuration.Name = PresetName;
-            if (_presetStorage.Contains(_presetName))
+            if (_presetRepository.Contains(_presetName))
             {
-                int presetNumber = GetNextAvailableNumber();
-                _configuration.Name = PresetName + presetNumber; //Now the output is like 'Default1', 'Default2' etc.
+                int presetNr = GetNextAvailableNumber();
+                _configuration.Name = $"{_presetName} {presetNr}"; //Now the output is like 'Default 1', 'Default 2' etc.
             }
-
             _presetService.AddPreset(_configuration);
-#if Debug
-                Debug.WriteLine("Created preset " + _configuration.Name);
-#endif
+
         }, () => true);
 
         #endregion Commands
@@ -51,9 +48,9 @@ namespace NClicker.ViewModels
         private int GetNextAvailableNumber()
         {
             int value = 1;
-            while (value < int.MaxValue)
+            while (value < ushort.MaxValue)
             {
-                if (_presetStorage.Contains(_presetName + value))
+                if (_presetRepository.Contains($"{_presetName} {value}"))
                 {
                     value++;
                 }

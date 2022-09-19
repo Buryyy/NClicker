@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using NClicker.Hooks;
+using NClicker.Repositories;
 using NClicker.Services;
 using NClicker.Storage;
 using NClicker.ViewModels;
@@ -11,10 +12,10 @@ namespace NClicker
         protected override void Load(ContainerBuilder builder)
         {
             //Storages
-            builder.Register(c => new PresetStorage()).As<IPresetStorage>().SingleInstance();
+            builder.Register(c => new PresetRepository()).As<IPresetRepository>().SingleInstance();
 
             //Services
-            builder.Register(c => new PresetService(c.Resolve<IPresetStorage>()))
+            builder.Register(c => new PresetService(c.Resolve<IPresetRepository>()))
                 .As<IPresetService>().SingleInstance();
             builder.Register(c => new MouseControllerService(new System.Random()))
                 .As<IMouseControllerService>().SingleInstance();
@@ -24,8 +25,7 @@ namespace NClicker
             builder.Register(c => new KeyboardService(
                 c.Resolve<GlobalKeyboardHook>())).As<IKeyboardService>().SingleInstance();
 
-            builder.Register(c => new MainViewModel(
-                c.Resolve<IPresetStorage>(), c.Resolve<IPresetService>(),
+            builder.Register(c => new MainViewModel(c.Resolve<IPresetService>(),
                 c.Resolve<IKeyboardService>())).SingleInstance();
         }
     }

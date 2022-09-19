@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using NClicker.Models;
 using NClicker.Services;
-using NClicker.Storage;
 using NClicker.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -13,7 +12,6 @@ namespace NClicker.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly IPresetStorage _presetStorage;
         private readonly IPresetService _presetService;
         private readonly IKeyboardService _keyboardService;
 
@@ -32,15 +30,15 @@ namespace NClicker.ViewModels
 
         #endregion Backing fields
 
-        public MainViewModel(IPresetStorage presetStorage, IPresetService presetService,
+        public MainViewModel(IPresetService presetService,
             IKeyboardService keyboardService)
         {
             _presets = new ObservableCollection<RunConfiguration>();
-            _presetStorage = presetStorage;
             _presetService = presetService;
             _keyboardService = keyboardService;
             SetDefaultConfiguration();
             _presetService.SharedPresetCollection.CollectionChanged += CollectionChanged;
+            AppTitle = $"NClicker (v. {GetType().Assembly.GetName().Version})";
         }
 
         #region Commands
@@ -127,6 +125,13 @@ namespace NClicker.ViewModels
 
         #region Binding properties
 
+        private string _appTitle;
+
+        public string AppTitle
+        {
+            get => _appTitle;
+            set => SetPropertyValue(ref _appTitle, value);
+        }
         public RunConfiguration SelectedConfiguration
         {
             get => _selectedConfig;
@@ -190,7 +195,7 @@ namespace NClicker.ViewModels
         private void RefreshUIPresets()
         {
             Presets = _presetService.SharedPresetCollection;
-            PresetsHeader = $"Presets ({_presetStorage.TotalPresets})";
+            PresetsHeader = $"Presets ({_presetService.GetTotalPresets()})";
         }
 
         private void LoadRunConfiguration(RunConfiguration config)
@@ -212,7 +217,7 @@ namespace NClicker.ViewModels
             BlockKeys = Constants.DefaultConfig.BlockInput;
             Seconds = Constants.DefaultConfig.Seconds.ToString();
             Milliseconds = Constants.DefaultConfig.Milliseconds.ToString();
-            PresetsHeader = $"Presets ({_presetStorage.TotalPresets})";
+            PresetsHeader = $"Presets ({_presetService.GetTotalPresets()})";
             RandomSeconds = Constants.DefaultConfig.RandomSeconds.ToString();
             RandomMilliseconds = Constants.DefaultConfig.RandomMilliseconds.ToString();
         }

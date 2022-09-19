@@ -19,5 +19,7 @@ namespace NClicker
             RandomMilliseconds = 35,
             BlockInput = true,
         };
+
+        public const string LiteDbConnectionString = "LocalDB.db";
     }
 }

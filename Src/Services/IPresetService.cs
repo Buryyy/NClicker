@@ -12,5 +12,6 @@ namespace NClicker.Services
         void RemovePreset(RunConfiguration configuration);
 
         void ResetPreset(RunConfiguration configuration);
+        int GetTotalPresets();
     }
 }

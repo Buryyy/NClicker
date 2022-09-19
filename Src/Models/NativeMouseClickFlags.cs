@@ -3,7 +3,7 @@
 namespace NClicker.Models
 {
     [Flags]
-    public enum MouseClickType
+    public enum NativeMouseClickFlags
     {
         LeftDown = 0x02,
         LeftUp = 0x04,
