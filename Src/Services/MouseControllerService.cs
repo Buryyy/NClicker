@@ -1,7 +1,6 @@
 ﻿using NClicker.Helpers;
 using NClicker.Models;
 using System;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace NClicker.Services
@@ -14,16 +13,10 @@ namespace NClicker.Services
 
         public MouseControllerService(Random random)
         {
-            _random = new Random();
+            _random = Random.Shared;
         }
 
-
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetCursorPos(out Position lpPoint);
-
-        public void LoopClick(int seconds, int milliseconds, int randomSeconds, int randomMilliseconds)
+        public void OnLoopClick(int seconds, int milliseconds, int randomSeconds, int randomMilliseconds)
         {
             if (IsRunning) return;
             Task.Run(async () =>

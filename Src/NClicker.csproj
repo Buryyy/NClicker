@@ -14,6 +14,7 @@
     <PackageProjectUrl>https://github.com/Buryyy/NClicker</PackageProjectUrl>
     <PackageIcon>nclicker.png</PackageIcon>
     <StartupObject>NClicker.App</StartupObject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

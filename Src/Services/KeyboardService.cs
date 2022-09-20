@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using NClicker.Hooks;
+using NClicker.Models;
 using NClicker.ViewModels;
 
 namespace NClicker.Services
@@ -9,13 +9,13 @@ namespace NClicker.Services
         private const int VirtualKeyF1 = 0x70;
         private const int VirtualKeyF2 = 0x71;
 
-        private readonly GlobalKeyboardHook _globalKeyboardHook;
+        private readonly GlobalKeyboardService _globalKeyboardService;
         private bool _blockKeys;
 
-        public KeyboardService(GlobalKeyboardHook globalKeyboardHook)
+        public KeyboardService(GlobalKeyboardService globalKeyboardService)
         {
-            _globalKeyboardHook = globalKeyboardHook;
-            _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
+            _globalKeyboardService = globalKeyboardService;
+            _globalKeyboardService.KeyboardPressed += OnKeyPressed;
         }
 
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs @event)

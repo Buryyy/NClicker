@@ -68,7 +68,7 @@ namespace NClicker.ViewModels
                 }
 
                 App.Context.Resolve<IMouseControllerService>()
-                    .LoopClick(_seconds, _milliseconds, _randomSeconds, _randomMilliseconds);
+                    .OnLoopClick(_seconds, _milliseconds, _randomSeconds, _randomMilliseconds);
             }
             catch (Exception exception)
             {

@@ -2,7 +2,7 @@
 {
     public interface IMouseControllerService
     {
-        void LoopClick(int seconds, int milliseconds, int randomSeconds, int randomMilliseconds);
+        void OnLoopClick(int seconds, int milliseconds, int randomSeconds, int randomMilliseconds);
 
         void Stop();
     }

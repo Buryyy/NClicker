@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using NClicker.Hooks;
 using NClicker.Repositories;
 using NClicker.Services;
 using NClicker.Storage;
@@ -20,10 +19,10 @@ namespace NClicker
             builder.Register(c => new MouseControllerService(new System.Random()))
                 .As<IMouseControllerService>().SingleInstance();
 
-            builder.Register(c => new GlobalKeyboardHook()).SingleInstance();
+            builder.Register(c => new GlobalKeyboardService()).SingleInstance();
 
             builder.Register(c => new KeyboardService(
-                c.Resolve<GlobalKeyboardHook>())).As<IKeyboardService>().SingleInstance();
+                c.Resolve<GlobalKeyboardService>())).As<IKeyboardService>().SingleInstance();
 
             builder.Register(c => new MainViewModel(c.Resolve<IPresetService>(),
                 c.Resolve<IKeyboardService>())).SingleInstance();
